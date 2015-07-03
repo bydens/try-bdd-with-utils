@@ -7,7 +7,18 @@ module.exports = {
      */
  
     sort:function (list, comparator) {
-        return [];
+      var count = list.length-1;
+        for (var i = 0; i < count; i++) {
+          for (var j = 0; j < count-i; j++) {
+            if ((comparator && comparator(list[j], list[j + 1])) || 
+                (!comparator && list[j] > list[j+1])) {
+              var pos = list[j];
+              list[j] = list[j + 1];
+              list[j+1] = pos;
+            }
+          }
+        }
+      return(list);
     },
  
     /**
@@ -17,7 +28,7 @@ module.exports = {
      */
  
     capitalize:function (string) {
-        return "";
+        return string.charAt(0).toUpperCase() + string.slice(1);
     },
  
     /**
@@ -27,7 +38,20 @@ module.exports = {
      */
  
     camelize:function (sequence) {
-        return "";
+        function upp(str) {
+            return str.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
+        }
+        if (typeof(sequence) === "string") {
+            return upp(sequence);
+        } else if(Object.prototype.toString.call(sequence).toUpperCase() === '[OBJECT ARRAY]'){
+            var result = [];
+            for(var i = 0 ; i < sequence.length ; i++){
+                result[i] = sequence[i].charAt(0).toUpperCase() + sequence[i].slice(1);;
+            }
+            return result;
+        } else {
+            return false;
+        }
     },
  
     /**
@@ -37,7 +61,7 @@ module.exports = {
      */
  
     trim:function (str) {
-        return "";
+        return str.replace(/^\s+|\s+$/g, "");
     },
 
     /**
@@ -47,7 +71,11 @@ module.exports = {
      */
  
     reverse:function (list) {
-        return [];
+        var result = [];
+        for (var i = 0; i < list.length; i++) {
+            result.unshift(list[i]);
+         }
+        return result;
     },
  
     /**

@@ -5,10 +5,11 @@ describe('Utils', function() {
 
 	describe('#sort()', function() {
 		it('should sort given array of numbers with ascending ordering', function() {
-			expect(utils.sort([2, 1, 3, 0])).to.equal([0, 1, 2, 3]);
+			expect(utils.sort([2, 1, 3, 0, 6]).join()).to.equal([0, 1, 2, 3, 6].join());
+			expect(utils.sort([2, 1, 3, 0, 6], function(a, b){return a > b}).join()).to.equal([0, 1, 2, 3, 6].join());
+			expect(utils.sort([2, 1, 3, 0, 6], function(a, b){return a < b}).join()).to.equal([6, 3, 2, 1, 0].join());
 		});
 
-		//TODO: don't forget about custom comparator function
 	});
 
 	describe('#capitalize()', function() {
@@ -17,6 +18,30 @@ describe('Utils', function() {
 		});
 	});
 
-	//TODO: Add your specs for other methods
+	describe('#trim()', function() {
+		it('should make any count of spaces from the beginning and from the end of the string', function() {
+			expect(utils.trim(' just do it! ')).to.equal('just do it!');
+		});
+	});
 
+	describe('#camelize()', function() {
+		it('should camelize string or array of string', function() {
+			expect(utils.camelize('just do it!')).to.equal('Just Do It!');
+			expect(utils.camelize(['just', 'do', 'it!']).join()).to.equal(['Just', 'Do', 'It!'].join());
+		});
+	});
+
+	describe('#reverse()', function() {
+		it('should returned reverses a specified list', function() {
+			expect(utils.reverse(['A', 'D', '23', 'Agava', 34]).join())
+				.to.equal([34, 'Agava', '23', 'D', 'A'].join())
+				.and.to.be.empty;
+		});
+	});
+
+	describe('#map()', function() {
+		it('should change each list\'s element by applying handler', function() {
+			expect(utils.map([])).to.equal([]);
+		});
+	});
 });
