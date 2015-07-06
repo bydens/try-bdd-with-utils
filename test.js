@@ -41,7 +41,21 @@ describe('Utils', function() {
 
 	describe('#map()', function() {
 		it('should change each list\'s element by applying handler', function() {
-			expect(utils.map([])).to.equal([]);
+			expect(utils.map([2, 1, 3, 0, 6],function(arr) {return arr += 6;})).to.eql([ 8, 7, 9, 6, 12 ]);
+			expect(utils.map({'name': 'Vasia', 'age': 19}, function(arr) {return arr += 6;})).to.eql({ name: 'Vasia6', age: 25 });
 		});
 	});
+
+	describe('#groupBy()', function() {
+		it('should group some input sequence of element by some rule', function() {
+			expect(utils.groupBy([1.3, 2.1, 2.4], function(num){ return Math.floor(num); })).to.eql({1: [1.3], 2: [2.1, 2.4]});
+		});
+	});
+
+	describe('#once()', function() {
+		it('should return called function only once', function() {
+			expect(utils.once(function(func){}).to.be.true);
+		});
+	});
+
 });

@@ -86,7 +86,25 @@ module.exports = {
      */
  
     map:function (list, iterator) {
-        return [];
+      var typeList = Object.prototype.toString.call(list).toUpperCase();
+      switch(typeList){
+          case '[OBJECT ARRAY]':
+            var result = [];
+            for (var i = 0; i < list.length; i++) {
+              result.push(iterator(list[i]));
+            }
+            return result;
+          case '[OBJECT OBJECT]':
+            var result = {};
+            for (var item in list) {
+              if (list.hasOwnProperty(item)) {
+                result[item] = iterator(list[item]);
+              }
+            }
+            return result;
+          default:
+              return false;
+      }
     },
  
     /**
@@ -97,7 +115,16 @@ module.exports = {
      */
  
     groupBy:function (list, iterator) {
-        return {};
+      var result = {};
+      for (var i = 0; i < list.length; i++) {
+        if (result.hasOwnProperty(iterator(list[i]))) {
+          result[iterator(list[i])].push(list[i]);
+        } else {
+          result[iterator(list[i])] = [];
+          result[iterator(list[i])].push(list[i]);
+        }
+      }
+      return result;
     },
 
     /**
@@ -108,7 +135,14 @@ module.exports = {
      */
 
     once: function(func){
-        return;
+      var result;
+      return function() { 
+        if(func) {
+          result = func.apply(this, arguments);
+          func = null;
+        }
+        return result;
+      };
     }, 
 
 
