@@ -116,12 +116,13 @@ module.exports = {
  
     groupBy:function (list, iterator) {
       var result = {};
+      var key;
       for (var i = 0; i < list.length; i++) {
-        if (result.hasOwnProperty(iterator(list[i]))) {
-          result[iterator(list[i])].push(list[i]);
+        key = iterator(list[i])
+        if (result.hasOwnProperty(key)) {
+          result[key].push(list[i]);
         } else {
-          result[iterator(list[i])] = [];
-          result[iterator(list[i])].push(list[i]);
+          result[key] = [list[i]];
         }
       }
       return result;
