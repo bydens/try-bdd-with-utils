@@ -55,10 +55,43 @@ describe('Utils', function() {
 	describe('#once()', function() {
 		it('should return called function only once', function() {
 			var counter = 0;
-			var newFunc = utils.once(function(){counter++});
+			var newFunc = utils.once(function(){counter++;});
 			newFunc();
 			newFunc();
 			expect(counter).to.equal(1);
+		});
+	});
+
+	describe('#debounce()', function() {
+		it('debounce', function() {
+
+		var output = false;
+		var time = 2000;
+
+		var tmsmp = Date.now();
+		var steps = 0;
+		var getTime;
+
+		function testFunc(arg) {output = true;}
+		var f = utils.debounce(testFunc, time);
+
+		function timeout() {
+		    setTimeout(function () {
+		        f();
+		        if (output) {
+		          getTime = Math.floor((Date.now() - tmsmp) / 1000);
+		          if (steps) {
+		          	expect((getTime / steps) * 1000).to.equal(time);
+		            // console.log((getTime / steps) * 1000);
+		          }
+		          if (steps >= 7) {return;}
+		          steps++;
+		        }
+		        output = false;
+		        timeout();
+		    }, 200);
+		}
+		timeout();
 		});
 	});
 
