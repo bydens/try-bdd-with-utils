@@ -54,7 +54,11 @@ describe('Utils', function() {
 
 	describe('#once()', function() {
 		it('should return called function only once', function() {
-			expect(utils.once(function(func){}).to.be.true);
+			var counter = 0;
+			var newFunc = utils.once(function(){counter++});
+			newFunc();
+			newFunc();
+			expect(counter).to.equal(1);
 		});
 	});
 
