@@ -7,14 +7,36 @@ module.exports = {
      */
  
     sort:function (list, comparator) {
+      if (
+        !list 
+        || Object.prototype.toString.call(list).toUpperCase() !== '[OBJECT ARRAY]' 
+      ) {
+        return null;
+      }
       var count = list.length-1;
         for (var i = 0; i < count; i++) {
           for (var j = 0; j < count-i; j++) {
-            if ((comparator && comparator(list[j], list[j + 1])) || 
-                (!comparator && list[j] > list[j+1])) {
-              var pos = list[j];
-              list[j] = list[j + 1];
-              list[j+1] = pos;
+            if (typeof(list[j]) == "number") {
+              if (
+                  (
+                    comparator 
+                    && Object.prototype.toString.call(comparator).toUpperCase() === '[OBJECT FUNCTION]'
+                    && comparator(list[j], list[j + 1])
+                  ) 
+                  || 
+                  (
+                    (!comparator 
+                    || typeof(comparator) == 'string')
+                    && list[j] > list[j+1]
+                  )
+                ) 
+              {
+                var pos = list[j];
+                list[j] = list[j + 1];
+                list[j+1] = pos;
+              } 
+            } else {
+              return false;
             }
           }
         }
@@ -28,7 +50,11 @@ module.exports = {
      */
  
     capitalize:function (string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+      if (!string || typeof(string) !== 'string' || !string.length){
+        return false;
+      }
+      var result = string.trim();
+      return result.charAt(0).toUpperCase() + result.slice(1);
     },
  
     /**
@@ -61,7 +87,10 @@ module.exports = {
      */
  
     trim:function (str) {
+      if (str && typeof(str) === 'string') {
         return str.replace(/^\s+|\s+$/g, "");
+      }
+      return false;
     },
 
     /**
@@ -71,11 +100,14 @@ module.exports = {
      */
  
     reverse:function (list) {
-        var result = [];
-        for (var i = 0; i < list.length; i++) {
-            result.unshift(list[i]);
-         }
-        return result;
+      var result = [];
+      if (!list || Object.prototype.toString.call(list).toUpperCase() === '[OBJECT OBJECT]') {
+        return false;
+      }
+      for (var i = 0; i < list.length; i++) {
+        result.unshift(list[i]);
+      }
+      return result;
     },
  
     /**
@@ -86,25 +118,28 @@ module.exports = {
      */
  
     map:function (list, iterator) {
-      var typeList = Object.prototype.toString.call(list).toUpperCase();
-      switch(typeList){
-          case '[OBJECT ARRAY]':
-            var result = [];
-            for (var i = 0; i < list.length; i++) {
-              result.push(iterator(list[i]));
-            }
-            return result;
-          case '[OBJECT OBJECT]':
-            var result = {};
-            for (var item in list) {
-              if (list.hasOwnProperty(item)) {
-                result[item] = iterator(list[item]);
+      if(list && iterator){
+        var typeList = Object.prototype.toString.call(list).toUpperCase();
+        switch(typeList){
+            case '[OBJECT ARRAY]':
+              var result = [];
+              for (var i = 0; i < list.length; i++) {
+                result.push(iterator(list[i]));
               }
-            }
-            return result;
-          default:
-              return false;
+              return result;
+            case '[OBJECT OBJECT]':
+              var result = {};
+              for (var item in list) {
+                if (list.hasOwnProperty(item)) {
+                  result[item] = iterator(list[item]);
+                }
+              }
+              return result;
+            default:
+                return false;
+        }
       }
+      return false;
     },
  
     /**
@@ -115,10 +150,20 @@ module.exports = {
      */
  
     groupBy:function (list, iterator) {
+      // if(list === Object.prototype.toString.call(list).toUpperCase() === '[OBJECT ARRAY]' 
+      //   && iterator === Object.prototype.toString.call(iterator).toUpperCase() === '[OBJECT FUNCTION]') {
+      if(
+          !list 
+          || Object.prototype.toString.call(list).toUpperCase() !== '[OBJECT ARRAY]' 
+          || !iterator 
+          || Object.prototype.toString.call(iterator).toUpperCase() !== '[OBJECT FUNCTION]'
+        ) {
+        return false;
+      }
       var result = {};
       var key;
       for (var i = 0; i < list.length; i++) {
-        key = iterator(list[i])
+        key = iterator(list[i]);
         if (result.hasOwnProperty(key)) {
           result[key].push(list[i]);
         } else {
@@ -136,14 +181,17 @@ module.exports = {
      */
 
     once: function(func){
-      var result;
-      return function() { 
-        if(func) {
-          result = func.apply(this, arguments);
-          func = null;
-        }
-        return result;
-      };
+      if(func || Object.prototype.toString.call(func).toUpperCase() === '[OBJECT FUNCTION]') {
+        var result;
+        return function() { 
+          if(func) {
+            result = func.apply(this, arguments);
+            func = null;
+          }
+          return result;
+        };
+      }
+      return false;
     }, 
 
 
@@ -157,13 +205,21 @@ module.exports = {
      */
 
     debounce: function(func, wait){
-      var state = null;
-      var COOLDOWN = 1;
-      return function() {
-        if (state) return;
-        func.apply(this, arguments);
-        state = COOLDOWN;
-        setTimeout(function() { state = null; }, wait);
-      };
+      if(
+          func 
+          && Object.prototype.toString.call(func).toUpperCase() === '[OBJECT FUNCTION]'
+          && wait
+          && typeof(wait) === 'number'
+        ) {
+        var state = null;
+        var COOLDOWN = 1;
+        return function() {
+          if (state) return;
+          func.apply(this, arguments);
+          state = COOLDOWN;
+          setTimeout(function() { state = null; }, wait);
+        };
+      }
+      return false;
     }
 };
