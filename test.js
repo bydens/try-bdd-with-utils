@@ -3,7 +3,7 @@ var utils = require('./utils'),
 
 describe('Utils', function() {
 
-	describe('#isArray()', function() {
+	describe('#isArray(argument)', function() {
 		it('Check the presence of an argument', function() {
 			expect(utils.isArray()).to.equal(false);
 		});
@@ -33,7 +33,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#isFunction()', function() {
+	describe('#isFunction(argument)', function() {
 		it('Check the presence of an argument', function() {
 			expect(utils.isFunction()).to.equal(false);
 		});
@@ -63,7 +63,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#isObject()', function() {
+	describe('#isObject(argument)', function() {
 		it('Check the presence of an argument', function() {
 			expect(utils.isObject()).to.equal(false);
 		});
@@ -93,7 +93,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#sort()', function() {
+	describe('#sort(list, comparator)', function() {
 		it('Argument "list" must be "array"', function() {
 			expect(utils.sort(null)).to.equal(false);
 			expect(utils.sort(false)).to.equal(false);
@@ -123,7 +123,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#capitalize()', function() {
+	describe('#capitalize(string)', function() {
 		it('Argument "string" must be "string" and not be "null"', function() {
 			expect(utils.capitalize(null)).to.equal(false);
 			expect(utils.capitalize(false)).to.equal(false);
@@ -141,7 +141,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#trim()', function() {
+	describe('#trim(str)', function() {
 		it('Argument "str" must be "string" and not be "null"', function() {
 			expect(utils.trim(null)).to.equal(false);
 			expect(utils.trim(false)).to.equal(false);
@@ -157,7 +157,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#camelize()', function() {
+	describe('#camelize(sequence)', function() {
 		it('Argument "sequence" must be "string" or "array"', function() {
 			expect(utils.camelize(null)).to.equal(false);
 			expect(utils.camelize(false)).to.equal(false);
@@ -174,7 +174,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#reverse()', function() {
+	describe('#reverse(list)', function() {
 		it('Argument "list" must be "array" and may be empty', function() {
 			expect(utils.reverse(null)).to.not.equal(false);
 			expect(utils.reverse(false)).to.not.equal(false);
@@ -191,7 +191,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#map()', function() {
+	describe('#map(list, iterator)', function() {
 		var mapIterator = function(){};
 		var mapList = [];
 		it('Argument "list" must be only "array" or "object"', function() {
@@ -224,7 +224,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#groupBy()', function() {
+	describe('#groupBy(list, iterator)', function() {
 		var groupByIterator = function(){};
 		var groupByList = [];
 		it('Argument "list" must be only "array"', function() {
@@ -254,7 +254,7 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#once()', function() {
+	describe('#once(func)', function() {
 		it('Argument "func" must be "function" and not be "null"', function() {
 			expect(utils.once(null)).to.equal(false);
 			expect(utils.once(false)).to.equal(false);
@@ -274,19 +274,9 @@ describe('Utils', function() {
 		});
 	});
 
-	describe('#debounce()', function() {
+	describe('#debounce(func, wait)', function() {
 		var debounceFunc = function(){};
 		var debounceWait = 2000;
-		it('Argument "wait" must be only "number"', function() {
-			expect(utils.debounce(debounceFunc, null)).to.equal(false);
-			expect(utils.debounce(debounceFunc, false)).to.equal(false);
-			expect(utils.debounce(debounceFunc, undefined)).to.equal(false);
-			expect(utils.debounce(debounceFunc, 'string')).to.equal(false);
-			expect(utils.debounce(debounceFunc, 2000)).to.not.equal(false);
-			expect(utils.debounce(debounceFunc, function(){})).to.equal(false);
-			expect(utils.debounce(debounceFunc, {})).to.equal(false);
-			expect(utils.debounce(debounceFunc, [])).to.equal(false);
-		});
 		it('Argument "func" must be only "function"', function() {
 			expect(utils.debounce(null, debounceWait)).to.equal(false);
 			expect(utils.debounce(false, debounceWait)).to.equal(false);
@@ -296,6 +286,16 @@ describe('Utils', function() {
 			expect(utils.debounce(function(){}, debounceWait)).to.not.equal(false);
 			expect(utils.debounce({}, debounceWait)).to.equal(false);
 			expect(utils.debounce([], debounceWait)).to.equal(false);
+		});
+		it('Argument "wait" must be only "number"', function() {
+			expect(utils.debounce(debounceFunc, null)).to.equal(false);
+			expect(utils.debounce(debounceFunc, false)).to.equal(false);
+			expect(utils.debounce(debounceFunc, undefined)).to.equal(false);
+			expect(utils.debounce(debounceFunc, 'string')).to.equal(false);
+			expect(utils.debounce(debounceFunc, 2000)).to.not.equal(false);
+			expect(utils.debounce(debounceFunc, function(){})).to.equal(false);
+			expect(utils.debounce(debounceFunc, {})).to.equal(false);
+			expect(utils.debounce(debounceFunc, [])).to.equal(false);
 		});
 		it('debounce', function() {
 		var output = false;
