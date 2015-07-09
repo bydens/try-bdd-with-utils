@@ -3,96 +3,221 @@ var utils = require('./utils'),
 
 describe('Utils', function() {
 
-	describe('#sort()', function() {
-		it('should sort given array of numbers with ascending ordering', function() {
-			expect(utils.sort([2, 1, 3, 0, 6])).to.eql([0, 1, 2, 3, 6]);
-			expect(utils.sort([])).to.be.empty;
-			expect(utils.sort()).to.be.null;
-			expect(utils.sort('string')).to.be.null;
-			expect(utils.sort(undefined)).to.be.null;
-			expect(utils.sort(null)).to.be.null;
-			expect(utils.sort(false)).to.be.null;
-			expect(utils.sort(['2', '1', '3', '0', '6'])).to.be.false;
-			expect(utils.sort([2, 1, 3, 0, 6], function(a, b){return a > b})).to.eql([0, 1, 2, 3, 6]);
-			expect(utils.sort([2, 1, 3, 0, 6], function(a, b){return a < b})).to.eql([6, 3, 2, 1, 0]);
-			expect(utils.sort([2, 1, 3, 0, 6], null)).to.eql([0, 1, 2, 3, 6]);
-			expect(utils.sort([2, 1, 3, 0, 6], 'string')).to.eql([0, 1, 2, 3, 6]);
-			expect(utils.sort([2, 1, 3, 0, 6], undefined)).to.eql([0, 1, 2, 3, 6]);
-			expect(utils.sort([2, 1, 3, 0, 6], false)).to.eql([0, 1, 2, 3, 6]);
+	describe('#isArray()', function() {
+		it('Check the presence of an argument', function() {
+			expect(utils.isArray()).to.equal(false);
+		});
+		it('Argument not be "null"', function() {
+			expect(utils.isArray(null)).to.equal(false);
+		});
+		it('Argument not be "undefined"', function() {
+			expect(utils.isArray(undefined)).to.equal(false);
+		});
+		it('Argument not be "false"', function() {
+			expect(utils.isArray(false)).to.equal(false);
+		});
+		it('Argument not be "string"', function() {
+			expect(utils.isArray('string')).to.equal(false);
+		});
+		it('Argument not be "number"', function() {
+			expect(utils.isArray(1)).to.equal(false);
+		});
+		it('Argument not be "object"', function() {
+			expect(utils.isArray({1: 'test'})).to.equal(false);
+		});
+		it('Argument not be "function"', function() {
+			expect(utils.isArray(function(){})).to.equal(false);
+		});
+		it('Argument is "array"', function() {
+			expect(utils.isArray([1, 2])).to.equal(true);
+		});
+	});
 
+	describe('#isFunction()', function() {
+		it('Check the presence of an argument', function() {
+			expect(utils.isFunction()).to.equal(false);
+		});
+		it('Argument not be "null"', function() {
+			expect(utils.isFunction(null)).to.equal(false);
+		});
+		it('Argument not be "undefined"', function() {
+			expect(utils.isFunction(undefined)).to.equal(false);
+		});
+		it('Argument not be "false"', function() {
+			expect(utils.isFunction(false)).to.equal(false);
+		});
+		it('Argument not be "string"', function() {
+			expect(utils.isFunction('string')).to.equal(false);
+		});
+		it('Argument not be "number"', function() {
+			expect(utils.isFunction(1)).to.equal(false);
+		});
+		it('Argument not be "object"', function() {
+			expect(utils.isFunction({1: 'test'})).to.equal(false);
+		});
+		it('Argument is "function"', function() {
+			expect(utils.isFunction(function(){})).to.equal(true);
+		});
+		it('Argument not be "array"', function() {
+			expect(utils.isFunction([1, 2])).to.equal(false);
+		});
+	});
+
+	describe('#isObject()', function() {
+		it('Check the presence of an argument', function() {
+			expect(utils.isObject()).to.equal(false);
+		});
+		it('Argument not be "null"', function() {
+			expect(utils.isObject(null)).to.equal(false);
+		});
+		it('Argument not be "undefined"', function() {
+			expect(utils.isObject(undefined)).to.equal(false);
+		});
+		it('Argument not be "false"', function() {
+			expect(utils.isObject(false)).to.equal(false);
+		});
+		it('Argument not be "string"', function() {
+			expect(utils.isObject('string')).to.equal(false);
+		});
+		it('Argument not be "number"', function() {
+			expect(utils.isObject(1)).to.equal(false);
+		});
+		it('Argument is "object"', function() {
+			expect(utils.isObject({1: 'test'})).to.equal(true);
+		});
+		it('Argument not be "function"', function() {
+			expect(utils.isObject(function(){})).to.equal(false);
+		});
+		it('Argument not be "array"', function() {
+			expect(utils.isObject([1, 2])).to.equal(false);
+		});
+	});
+
+	describe('#sort()', function() {
+		it('Argument "list" must be "array"', function() {
+			expect(utils.sort(null)).to.equal(false);
+			expect(utils.sort(false)).to.equal(false);
+			expect(utils.sort(undefined)).to.equal(false);
+			expect(utils.sort('string')).to.equal(false);
+			expect(utils.sort(1)).to.equal(false);
+			expect(utils.sort(function(){})).to.equal(false);
+			expect(utils.sort({})).to.equal(false);
+			expect(utils.sort([])).to.not.equal(false);
 		});
 
+		it('Argument "comparator" must be "function" or absent', function() {
+			var sortList = [];
+			expect(utils.sort(sortList, null)).to.not.equal(false);
+			expect(utils.sort(sortList, false)).to.not.equal(false);
+			expect(utils.sort(sortList, undefined)).to.not.equal(false);
+			expect(utils.sort(sortList, 'string')).to.equal(false);
+			expect(utils.sort(sortList, 1)).to.equal(false);
+			expect(utils.sort(sortList, function(){})).to.not.equal(false);
+			expect(utils.sort(sortList, {})).to.equal(false);
+			expect(utils.sort(sortList, [])).to.equal(false);
+		});
+		it('should sort given array of numbers with ascending ordering', function() {
+			expect(utils.sort([2, 1, 3, 0, 6])).to.eql([0, 1, 2, 3, 6]);
+			expect(utils.sort([2, 1, 3, 0, 6], function(a, b){return a > b})).to.eql([0, 1, 2, 3, 6]);
+			expect(utils.sort([2, 1, 3, 0, 6], function(a, b){return a < b})).to.eql([6, 3, 2, 1, 0]);
+		});
 	});
 
 	describe('#capitalize()', function() {
+		it('Argument "string" must be "string" and not be "null"', function() {
+			expect(utils.capitalize(null)).to.equal(false);
+			expect(utils.capitalize(false)).to.equal(false);
+			expect(utils.capitalize(undefined)).to.equal(false);
+			expect(utils.capitalize('string')).to.not.equal(false);
+			expect(utils.capitalize(1)).to.equal(false);
+			expect(utils.capitalize(function(){})).to.equal(false);
+			expect(utils.capitalize({})).to.equal(false);
+			expect(utils.capitalize([])).to.equal(false);
+		});
 		it('should make first letter of given string upper case', function() {
 			expect(utils.capitalize('just do it!')).to.equal('Just do it!');
 			expect(utils.capitalize(' just do it!')).to.equal('Just do it!');
 			expect(utils.capitalize('1 just do it!')).to.equal('1 just do it!');
-			expect(utils.capitalize()).to.be.false;
-			expect(utils.capitalize('')).to.be.false;
-			expect(utils.capitalize(1)).to.be.false;
-			expect(utils.capitalize([1, 2])).to.be.false;
-			expect(utils.capitalize({1: 'test'})).to.be.false;
-			expect(utils.capitalize(function(){})).to.be.false;
-			expect(utils.capitalize(undefined)).to.be.false;
-			expect(utils.capitalize(null)).to.be.false;
-			expect(utils.capitalize(false)).to.be.false;
 		});
 	});
 
 	describe('#trim()', function() {
+		it('Argument "str" must be "string" and not be "null"', function() {
+			expect(utils.trim(null)).to.equal(false);
+			expect(utils.trim(false)).to.equal(false);
+			expect(utils.trim(undefined)).to.equal(false);
+			expect(utils.trim('string')).to.not.equal(false);
+			expect(utils.trim(1)).to.equal(false);
+			expect(utils.trim(function(){})).to.equal(false);
+			expect(utils.trim({})).to.equal(false);
+			expect(utils.trim([])).to.equal(false);
+		});
 		it('should make any count of spaces from the beginning and from the end of the string', function() {
 			expect(utils.trim(' just do it! ')).to.equal('just do it!');
-			expect(utils.trim()).to.not.be.empty;
-			expect(utils.trim(undefined)).to.not.be.undefined;
-			expect(utils.trim(null)).to.not.be.null;
-			expect(utils.trim(false)).to.not.be.false;
-			expect(utils.trim(true)).to.not.be.false;
-			expect(utils.trim('false')).to.be.a('string');
-			expect(utils.trim({ foo: 'bar' })).to.not.be.an('object');
-			expect(utils.trim(1)).to.not.be.true;
-
 		});
 	});
 
 	describe('#camelize()', function() {
+		it('Argument "sequence" must be "string" or "array"', function() {
+			expect(utils.camelize(null)).to.equal(false);
+			expect(utils.camelize(false)).to.equal(false);
+			expect(utils.camelize(undefined)).to.equal(false);
+			expect(utils.camelize('string')).to.not.equal(false);
+			expect(utils.camelize(1)).to.equal(false);
+			expect(utils.camelize(function(){})).to.equal(false);
+			expect(utils.camelize({})).to.equal(false);
+			expect(utils.camelize([])).to.not.equal(false);
+		});
 		it('should camelize string or array of string', function() {
-			expect(utils.camelize()).to.not.be.empty;
-			expect(utils.camelize({ foo: 'bar' })).to.not.be.an('object');
-			expect(utils.camelize(undefined)).to.not.be.undefined;
-			expect(utils.camelize(null)).to.not.be.null;
-			expect(utils.camelize(false)).to.not.be.false;
-			expect(utils.camelize(true)).to.not.be.false;
-			expect(utils.camelize(1)).to.not.be.true;
 			expect(utils.camelize('just do it!')).to.equal('Just Do It!');
 			expect(utils.camelize(['just', 'do', 'it!'])).to.eql(['Just', 'Do', 'It!']);
 		});
 	});
 
 	describe('#reverse()', function() {
+		it('Argument "list" must be "array" and may be empty', function() {
+			expect(utils.reverse(null)).to.not.equal(false);
+			expect(utils.reverse(false)).to.not.equal(false);
+			expect(utils.reverse(undefined)).to.not.equal(false);
+			expect(utils.reverse('string')).to.equal(false);
+			expect(utils.reverse(1)).to.equal(false);
+			expect(utils.reverse(function(){})).to.equal(false);
+			expect(utils.reverse({})).to.equal(false);
+			expect(utils.reverse([])).to.not.equal(false);
+		});
+
 		it('should returned reverses a specified list', function() {
-			expect(utils.reverse()).to.not.be.empty;
-			expect(utils.reverse({ foo: 'bar' })).to.be.false;
-			expect(utils.reverse(undefined)).to.not.be.undefined;
-			expect(utils.reverse(null)).to.not.be.null;
-			expect(utils.reverse(false)).to.not.be.false;
-			expect(utils.reverse(true)).to.not.be.false;
-			expect(utils.reverse(1)).to.not.be.true;
-			expect(utils.reverse(['A', 'D', '23', 'Agava', 34]))
-				.to.eql([34, 'Agava', '23', 'D', 'A'])
-				.and.to.be.empty;
+			expect(utils.reverse(['A', 'D', '23', 'Agava', 34])).to.eql([34, 'Agava', '23', 'D', 'A']);
 		});
 	});
 
 	describe('#map()', function() {
+		var mapIterator = function(){};
+		var mapList = [];
+		it('Argument "list" must be only "array" or "object"', function() {
+			expect(utils.map(null, mapIterator)).to.equal(false);
+			expect(utils.map(false, mapIterator)).to.equal(false);
+			expect(utils.map(undefined, mapIterator)).to.equal(false);
+			expect(utils.map('string', mapIterator)).to.equal(false);
+			expect(utils.map(1, mapIterator)).to.equal(false);
+			expect(utils.map(function(){}, mapIterator)).to.equal(false);
+			expect(utils.map({}, mapIterator)).to.not.equal(false);
+			expect(utils.map([], mapIterator)).to.not.equal(false);
+		});
+		it('Argument "iterator" must be only "function"', function() {
+			expect(utils.map(mapList, null)).to.equal(false);
+			expect(utils.map(mapList, false)).to.equal(false);
+			expect(utils.map(mapList, undefined)).to.equal(false);
+			expect(utils.map(mapList, 'string')).to.equal(false);
+			expect(utils.map(mapList, 1)).to.equal(false);
+			expect(utils.map(mapList, function(){})).to.not.equal(false);
+			expect(utils.map(mapList, {})).to.equal(false);
+			expect(utils.map(mapList, [])).to.equal(false);
+		});
+
 		it('should change each list\'s element by applying handler', function() {
 			var param1 = [2, 1, 3, 0, 6];
 			var param2 = function(arr) {return arr += 6;};
-			expect(utils.map(null, param2)).to.not.be.null;
-			expect(utils.map(undefined, param2)).to.not.be.undefined;
-			expect(utils.map(param1, null)).to.not.be.null;
-			expect(utils.map(param1, undefined)).to.not.be.undefined;
 			expect(utils.map(param1, param2)).to.eql([ 8, 7, 9, 6, 12 ]);
 			expect(utils.map({'name': 'Vasia', 'age': 19}, param2)).to.eql({ name: 'Vasia6', age: 25 });
 
@@ -100,45 +225,79 @@ describe('Utils', function() {
 	});
 
 	describe('#groupBy()', function() {
+		var groupByIterator = function(){};
+		var groupByList = [];
+		it('Argument "list" must be only "array"', function() {
+			expect(utils.groupBy(null, groupByIterator)).to.equal(false);
+			expect(utils.groupBy(false, groupByIterator)).to.equal(false);
+			expect(utils.groupBy(undefined, groupByIterator)).to.equal(false);
+			expect(utils.groupBy('string', groupByIterator)).to.equal(false);
+			expect(utils.groupBy(1, groupByIterator)).to.equal(false);
+			expect(utils.groupBy(function(){}, groupByIterator)).to.equal(false);
+			expect(utils.groupBy({}, groupByIterator)).to.equal(false);
+			expect(utils.groupBy([], groupByIterator)).to.not.equal(false);
+		});
+		it('Argument "iterator" must be only "function"', function() {
+			expect(utils.groupBy(groupByList, null)).to.equal(false);
+			expect(utils.groupBy(groupByList, false)).to.equal(false);
+			expect(utils.groupBy(groupByList, undefined)).to.equal(false);
+			expect(utils.groupBy(groupByList, 'string')).to.equal(false);
+			expect(utils.groupBy(groupByList, 1)).to.equal(false);
+			expect(utils.groupBy(groupByList, function(){})).to.not.equal(false);
+			expect(utils.groupBy(groupByList, {})).to.equal(false);
+			expect(utils.groupBy(groupByList, [])).to.equal(false);
+		});
 		it('should group some input sequence of element by some rule', function() {
 			var paramGroup1 = [1.3, 2.1, 2.4];
 			var paramGroup2 = function(num){ return Math.floor(num); };
-			expect(utils.groupBy(null, paramGroup2)).to.not.be.null;
-			expect(utils.groupBy(undefined, paramGroup2)).to.not.be.undefined;
-			expect(utils.groupBy('string', paramGroup2)).to.be.false;
-			expect(utils.groupBy(1, paramGroup2)).to.be.false;
-			expect(utils.groupBy(function(){}, paramGroup2)).to.be.false;
-			expect(utils.groupBy(false, paramGroup2)).to.be.false;
-			expect(utils.groupBy(paramGroup1, null)).to.not.be.null;
-			expect(utils.groupBy(paramGroup1, undefined)).to.not.be.undefined;
-			expect(utils.groupBy(paramGroup1, 'string')).to.be.false;
-			expect(utils.groupBy(paramGroup1, 1)).to.be.false;
-			expect(utils.groupBy(paramGroup1, function(){})).to.be.false;
-			expect(utils.groupBy(paramGroup1, false)).to.be.false;
 			expect(utils.groupBy(paramGroup1, paramGroup2)).to.eql({1: [1.3], 2: [2.1, 2.4]});
 		});
 	});
 
 	describe('#once()', function() {
+		it('Argument "func" must be "function" and not be "null"', function() {
+			expect(utils.once(null)).to.equal(false);
+			expect(utils.once(false)).to.equal(false);
+			expect(utils.once(undefined)).to.equal(false);
+			expect(utils.once('string')).to.equal(false);
+			expect(utils.once(1)).to.equal(false);
+			expect(utils.once(function(){})).to.not.equal(false);
+			expect(utils.once({})).to.equal(false);
+			expect(utils.once([])).to.equal(false);
+		});
 		it('should return called function only once', function() {
 			var counter = 0;
 			var newFunc = utils.once(function(){counter++;});
 			newFunc();
 			newFunc();
 			expect(counter).to.equal(1);
-			expect(utils.once(null)).to.not.be.null;
-			expect(utils.once(undefined)).to.not.be.undefined;
-			expect(utils.once(null)).to.not.be.null;
-			expect(utils.once(false)).to.be.false;
-			expect(utils.once(true)).to.be.false;
-			expect(utils.once(1)).to.not.be.true;
-			expect(utils.once('1')).to.not.be.true;
 		});
 	});
 
 	describe('#debounce()', function() {
+		var debounceFunc = function(){};
+		var debounceWait = 2000;
+		it('Argument "wait" must be only "number"', function() {
+			expect(utils.debounce(debounceFunc, null)).to.equal(false);
+			expect(utils.debounce(debounceFunc, false)).to.equal(false);
+			expect(utils.debounce(debounceFunc, undefined)).to.equal(false);
+			expect(utils.debounce(debounceFunc, 'string')).to.equal(false);
+			expect(utils.debounce(debounceFunc, 2000)).to.not.equal(false);
+			expect(utils.debounce(debounceFunc, function(){})).to.equal(false);
+			expect(utils.debounce(debounceFunc, {})).to.equal(false);
+			expect(utils.debounce(debounceFunc, [])).to.equal(false);
+		});
+		it('Argument "func" must be only "function"', function() {
+			expect(utils.debounce(null, debounceWait)).to.equal(false);
+			expect(utils.debounce(false, debounceWait)).to.equal(false);
+			expect(utils.debounce(undefined, debounceWait)).to.equal(false);
+			expect(utils.debounce('string', debounceWait)).to.equal(false);
+			expect(utils.debounce(2000, debounceWait)).to.equal(false);
+			expect(utils.debounce(function(){}, debounceWait)).to.not.equal(false);
+			expect(utils.debounce({}, debounceWait)).to.equal(false);
+			expect(utils.debounce([], debounceWait)).to.equal(false);
+		});
 		it('debounce', function() {
-
 		var output = false;
 		var time = 2000;
 		var tmsmp = Date.now();
@@ -166,6 +325,5 @@ describe('Utils', function() {
 		});
 	});
 	
-	expect(utils.debounce(null, 2000)).to.not.be.null;
 
 });

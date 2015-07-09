@@ -1,35 +1,41 @@
 module.exports = {
  
+     isArray:function (argument) {
+       if(!argument || Object.prototype.toString.call(argument).toUpperCase() !== '[OBJECT ARRAY]')
+        return false;
+       return true;
+     },
+
+     isFunction:function (argument) {
+       if(Object.prototype.toString.call(argument).toUpperCase() !== '[OBJECT FUNCTION]')
+        return false;
+       return true;
+     },
+
+     isObject:function (argument) {
+       if(Object.prototype.toString.call(argument).toUpperCase() !== '[OBJECT OBJECT]')
+        return false;
+       return true;
+     },
+
     /**
      * Sort given array by provided rule in comparator function
      * @param {Array} list
      * @param {Function} comparator
      */
- 
+
     sort:function (list, comparator) {
-      if (
-        !list 
-        || Object.prototype.toString.call(list).toUpperCase() !== '[OBJECT ARRAY]' 
-      ) {
-        return null;
-      }
+      if (!list || !this.isArray(list) || (comparator && !this.isFunction(comparator))) 
+        return false;
       var count = list.length-1;
         for (var i = 0; i < count; i++) {
           for (var j = 0; j < count-i; j++) {
             if (typeof(list[j]) == "number") {
               if (
-                  (
-                    comparator 
-                    && Object.prototype.toString.call(comparator).toUpperCase() === '[OBJECT FUNCTION]'
-                    && comparator(list[j], list[j + 1])
+                    (comparator && comparator(list[j], list[j + 1]))
+                    ||
+                    (!comparator && (list[j] > list[j+1]))
                   ) 
-                  || 
-                  (
-                    (!comparator 
-                    || typeof(comparator) == 'string')
-                    && list[j] > list[j+1]
-                  )
-                ) 
               {
                 var pos = list[j];
                 list[j] = list[j + 1];
@@ -69,7 +75,7 @@ module.exports = {
         }
         if (typeof(sequence) === "string") {
             return upp(sequence);
-        } else if(Object.prototype.toString.call(sequence).toUpperCase() === '[OBJECT ARRAY]'){
+        } else if(this.isArray(sequence)){
             var result = [];
             for(var i = 0 ; i < sequence.length ; i++){
                 result[i] = sequence[i].charAt(0).toUpperCase() + sequence[i].slice(1);;
@@ -101,11 +107,13 @@ module.exports = {
  
     reverse:function (list) {
       var result = [];
-      if (!list || Object.prototype.toString.call(list).toUpperCase() === '[OBJECT OBJECT]') {
+      if (list && !this.isArray(list)) {
         return false;
       }
-      for (var i = 0; i < list.length; i++) {
-        result.unshift(list[i]);
+      if (list && list.length) {
+        for (var i = 0; i < list.length; i++) {
+          result.unshift(list[i]);
+        }
       }
       return result;
     },
@@ -118,7 +126,7 @@ module.exports = {
      */
  
     map:function (list, iterator) {
-      if(list && iterator){
+      if(this.isFunction(iterator)){
         var typeList = Object.prototype.toString.call(list).toUpperCase();
         switch(typeList){
             case '[OBJECT ARRAY]':
@@ -150,13 +158,8 @@ module.exports = {
      */
  
     groupBy:function (list, iterator) {
-      // if(list === Object.prototype.toString.call(list).toUpperCase() === '[OBJECT ARRAY]' 
-      //   && iterator === Object.prototype.toString.call(iterator).toUpperCase() === '[OBJECT FUNCTION]') {
       if(
-          !list 
-          || Object.prototype.toString.call(list).toUpperCase() !== '[OBJECT ARRAY]' 
-          || !iterator 
-          || Object.prototype.toString.call(iterator).toUpperCase() !== '[OBJECT FUNCTION]'
+          !list || !this.isArray(list) || !iterator || !this.isFunction(iterator)
         ) {
         return false;
       }
@@ -181,7 +184,7 @@ module.exports = {
      */
 
     once: function(func){
-      if(func || Object.prototype.toString.call(func).toUpperCase() === '[OBJECT FUNCTION]') {
+      if(this.isFunction(func)) {
         var result;
         return function() { 
           if(func) {
@@ -194,7 +197,6 @@ module.exports = {
       return false;
     }, 
 
-
     /**
      * Creates and returns a new debounced version of the passed function 
      * which will postpone its execution until after wait milliseconds 
@@ -205,12 +207,7 @@ module.exports = {
      */
 
     debounce: function(func, wait){
-      if(
-          func 
-          && Object.prototype.toString.call(func).toUpperCase() === '[OBJECT FUNCTION]'
-          && wait
-          && typeof(wait) === 'number'
-        ) {
+      if(this.isFunction(func) && typeof(wait) === 'number') {
         var state = null;
         var COOLDOWN = 1;
         return function() {
