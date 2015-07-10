@@ -1,5 +1,6 @@
 var utils = require('./utils'),
     expect =  require('expect.js');
+    sinon = require('sinon');
 
 describe('Utils', function() {
 
@@ -272,6 +273,8 @@ describe('Utils', function() {
 			newFunc();
 			expect(counter).to.equal(1);
 		});
+
+
 	});
 
 	describe('#debounce(func, wait)', function() {
@@ -297,33 +300,28 @@ describe('Utils', function() {
 			expect(utils.debounce(debounceFunc, {})).to.equal(false);
 			expect(utils.debounce(debounceFunc, [])).to.equal(false);
 		});
-		it('debounce', function() {
-		var output = false;
-		var time = 2000;
-		var tmsmp = Date.now();
-		var steps = 0;
-		var getTime;
-		function testFunc(arg) {output = true;}
-		var f = utils.debounce(testFunc, time);
-		
-		function timeout() {
-		    setTimeout(function () {
-		        f();
-		        if (output) {
-		          getTime = Math.floor((Date.now() - tmsmp) / 1000);
-		          if (steps) {
-		          	expect((getTime / steps) * 1000).to.equal(time);
-		          }
-		          if (steps >= 7) {return;}
-		          steps++;
-		        }
-		        output = false;
-		        timeout();
-		    }, 200);
-		}
-		timeout();
-		});
 	});
-	
+});
+
+
+describe('Fake timers', function () {
+  beforeEach(function () {
+    this.clock = sinon.useFakeTimers();
+  });
+
+  afterEach(function () {
+    this.clock.restore();
+  });
+
+  it('test debounce with useFakeTimers', function () {
+    var spy = sinon.spy();
+   	utils.debounce(spy, 1000);
+
+    this.clock.tick(999);
+    expect(spy.called).to.equal(false);
+
+    this.clock.tick(2000);
+    expect(spy.called).to.equal(true);
+  });
 
 });

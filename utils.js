@@ -208,15 +208,13 @@ module.exports = {
 
     debounce: function(func, wait){
       if(this.isFunction(func) && typeof(wait) === 'number') {
-        var state = null;
-        var COOLDOWN = 1;
-        return function() {
-          if (state) return;
-          func.apply(this, arguments);
-          state = COOLDOWN;
-          setTimeout(function() { state = null; }, wait);
-        };
+        var result = setTimeout(function(){
+        func.apply(this, arguments);
+      }, wait);
+    return result;
       }
       return false;
     }
+
+
 };
