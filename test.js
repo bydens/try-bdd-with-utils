@@ -1,98 +1,101 @@
 var utils = require('./utils'),
+		Helper = require('./Helper'),
     expect =  require('expect.js');
     sinon = require('sinon');
 
-describe('Utils', function() {
-
+describe('Helper', function() {
 	describe('#isArray(argument)', function() {
 		it('Check the presence of an argument', function() {
-			expect(utils.isArray()).to.equal(false);
+			expect(Helper.isArray()).to.equal(false);
 		});
 		it('Argument not be "null"', function() {
-			expect(utils.isArray(null)).to.equal(false);
+			expect(Helper.isArray(null)).to.equal(false);
 		});
 		it('Argument not be "undefined"', function() {
-			expect(utils.isArray(undefined)).to.equal(false);
+			expect(Helper.isArray(undefined)).to.equal(false);
 		});
 		it('Argument not be "false"', function() {
-			expect(utils.isArray(false)).to.equal(false);
+			expect(Helper.isArray(false)).to.equal(false);
 		});
 		it('Argument not be "string"', function() {
-			expect(utils.isArray('string')).to.equal(false);
+			expect(Helper.isArray('string')).to.equal(false);
 		});
 		it('Argument not be "number"', function() {
-			expect(utils.isArray(1)).to.equal(false);
+			expect(Helper.isArray(1)).to.equal(false);
 		});
 		it('Argument not be "object"', function() {
-			expect(utils.isArray({1: 'test'})).to.equal(false);
+			expect(Helper.isArray({1: 'test'})).to.equal(false);
 		});
 		it('Argument not be "function"', function() {
-			expect(utils.isArray(function(){})).to.equal(false);
+			expect(Helper.isArray(function(){})).to.equal(false);
 		});
 		it('Argument is "array"', function() {
-			expect(utils.isArray([1, 2])).to.equal(true);
+			expect(Helper.isArray([1, 2])).to.equal(true);
 		});
 	});
 
 	describe('#isFunction(argument)', function() {
 		it('Check the presence of an argument', function() {
-			expect(utils.isFunction()).to.equal(false);
+			expect(Helper.isFunction()).to.equal(false);
 		});
 		it('Argument not be "null"', function() {
-			expect(utils.isFunction(null)).to.equal(false);
+			expect(Helper.isFunction(null)).to.equal(false);
 		});
 		it('Argument not be "undefined"', function() {
-			expect(utils.isFunction(undefined)).to.equal(false);
+			expect(Helper.isFunction(undefined)).to.equal(false);
 		});
 		it('Argument not be "false"', function() {
-			expect(utils.isFunction(false)).to.equal(false);
+			expect(Helper.isFunction(false)).to.equal(false);
 		});
 		it('Argument not be "string"', function() {
-			expect(utils.isFunction('string')).to.equal(false);
+			expect(Helper.isFunction('string')).to.equal(false);
 		});
 		it('Argument not be "number"', function() {
-			expect(utils.isFunction(1)).to.equal(false);
+			expect(Helper.isFunction(1)).to.equal(false);
 		});
 		it('Argument not be "object"', function() {
-			expect(utils.isFunction({1: 'test'})).to.equal(false);
+			expect(Helper.isFunction({1: 'test'})).to.equal(false);
 		});
 		it('Argument is "function"', function() {
-			expect(utils.isFunction(function(){})).to.equal(true);
+			expect(Helper.isFunction(function(){})).to.equal(true);
 		});
 		it('Argument not be "array"', function() {
-			expect(utils.isFunction([1, 2])).to.equal(false);
+			expect(Helper.isFunction([1, 2])).to.equal(false);
 		});
 	});
 
 	describe('#isObject(argument)', function() {
 		it('Check the presence of an argument', function() {
-			expect(utils.isObject()).to.equal(false);
+			expect(Helper.isObject()).to.equal(false);
 		});
 		it('Argument not be "null"', function() {
-			expect(utils.isObject(null)).to.equal(false);
+			expect(Helper.isObject(null)).to.equal(false);
 		});
 		it('Argument not be "undefined"', function() {
-			expect(utils.isObject(undefined)).to.equal(false);
+			expect(Helper.isObject(undefined)).to.equal(false);
 		});
 		it('Argument not be "false"', function() {
-			expect(utils.isObject(false)).to.equal(false);
+			expect(Helper.isObject(false)).to.equal(false);
 		});
 		it('Argument not be "string"', function() {
-			expect(utils.isObject('string')).to.equal(false);
+			expect(Helper.isObject('string')).to.equal(false);
 		});
 		it('Argument not be "number"', function() {
-			expect(utils.isObject(1)).to.equal(false);
+			expect(Helper.isObject(1)).to.equal(false);
 		});
 		it('Argument is "object"', function() {
-			expect(utils.isObject({1: 'test'})).to.equal(true);
+			expect(Helper.isObject({1: 'test'})).to.equal(true);
 		});
 		it('Argument not be "function"', function() {
-			expect(utils.isObject(function(){})).to.equal(false);
+			expect(Helper.isObject(function(){})).to.equal(false);
 		});
 		it('Argument not be "array"', function() {
-			expect(utils.isObject([1, 2])).to.equal(false);
+			expect(Helper.isObject([1, 2])).to.equal(false);
 		});
 	});
+});
+
+describe('Utils', function() {
 
 	describe('#sort(list, comparator)', function() {
 		it('Argument "list" must be "array"', function() {

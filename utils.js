@@ -1,3 +1,5 @@
+var Helper = require('./Helper');
+
 module.exports = {
  
      isArray:function (argument) {
@@ -25,7 +27,7 @@ module.exports = {
      */
 
     sort:function (list, comparator) {
-      if (!list || !this.isArray(list) || (comparator && !this.isFunction(comparator))) 
+      if (!list || !Helper.isArray(list) || (comparator && !Helper.isFunction(comparator))) 
         return false;
       var count = list.length-1;
         for (var i = 0; i < count; i++) {
@@ -75,7 +77,7 @@ module.exports = {
         }
         if (typeof(sequence) === "string") {
             return upp(sequence);
-        } else if(this.isArray(sequence)){
+        } else if(Helper.isArray(sequence)){
             var result = [];
             for(var i = 0 ; i < sequence.length ; i++){
                 result[i] = sequence[i].charAt(0).toUpperCase() + sequence[i].slice(1);;
@@ -107,7 +109,7 @@ module.exports = {
  
     reverse:function (list) {
       var result = [];
-      if (list && !this.isArray(list)) {
+      if (list && !Helper.isArray(list)) {
         return false;
       }
       if (list && list.length) {
@@ -126,7 +128,7 @@ module.exports = {
      */
  
     map:function (list, iterator) {
-      if(this.isFunction(iterator)){
+      if(Helper.isFunction(iterator)){
         var typeList = Object.prototype.toString.call(list).toUpperCase();
         switch(typeList){
             case '[OBJECT ARRAY]':
@@ -159,7 +161,7 @@ module.exports = {
  
     groupBy:function (list, iterator) {
       if(
-          !list || !this.isArray(list) || !iterator || !this.isFunction(iterator)
+          !list || !Helper.isArray(list) || !iterator || !Helper.isFunction(iterator)
         ) {
         return false;
       }
@@ -184,11 +186,11 @@ module.exports = {
      */
 
     once: function(func){
-      if(this.isFunction(func)) {
+      if(Helper.isFunction(func)) {
         var result;
         return function() { 
           if(func) {
-            result = func.apply(this, arguments);
+            result = func.apply(Helper, arguments);
             func = null;
           }
           return result;
@@ -207,9 +209,9 @@ module.exports = {
      */
 
     debounce: function(func, wait){
-      if(this.isFunction(func) && typeof(wait) === 'number') {
+      if(Helper.isFunction(func) && typeof(wait) === 'number') {
         var result = setTimeout(function(){
-        func.apply(this, arguments);
+        func.apply(Helper, arguments);
       }, wait);
     return result;
       }
