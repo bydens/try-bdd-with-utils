@@ -283,6 +283,14 @@ describe('Utils', function() {
 	describe('#debounce(func, wait)', function() {
 		var debounceFunc = function(){};
 		var debounceWait = 2000;
+
+	  beforeEach(function () {
+	    this.clock = sinon.useFakeTimers();
+	  });
+	  afterEach(function () {
+	    this.clock.restore();
+	  });
+
 		it('Argument "func" must be only "function"', function() {
 			expect(utils.debounce(null, debounceWait)).to.equal(false);
 			expect(utils.debounce(false, debounceWait)).to.equal(false);
@@ -293,6 +301,7 @@ describe('Utils', function() {
 			expect(utils.debounce({}, debounceWait)).to.equal(false);
 			expect(utils.debounce([], debounceWait)).to.equal(false);
 		});
+
 		it('Argument "wait" must be only "number"', function() {
 			expect(utils.debounce(debounceFunc, null)).to.equal(false);
 			expect(utils.debounce(debounceFunc, false)).to.equal(false);
@@ -303,28 +312,15 @@ describe('Utils', function() {
 			expect(utils.debounce(debounceFunc, {})).to.equal(false);
 			expect(utils.debounce(debounceFunc, [])).to.equal(false);
 		});
+
+		it('Test with use "FakeTimers"', function () {
+	    var spy = sinon.spy();
+	   	utils.debounce(spy, 1000);
+	    this.clock.tick(999);
+	    expect(spy.called).to.equal(false);
+	    this.clock.tick(1);
+	    expect(spy.called).to.equal(true);
+	  });
+
 	});
-});
-
-
-describe('Fake timers', function () {
-  beforeEach(function () {
-    this.clock = sinon.useFakeTimers();
-  });
-
-  afterEach(function () {
-    this.clock.restore();
-  });
-
-  it('test debounce with useFakeTimers', function () {
-    var spy = sinon.spy();
-   	utils.debounce(spy, 1000);
-
-    this.clock.tick(999);
-    expect(spy.called).to.equal(false);
-
-    this.clock.tick(2000);
-    expect(spy.called).to.equal(true);
-  });
-
 });
