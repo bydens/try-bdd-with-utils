@@ -1,6 +1,25 @@
-var Helper = require('./Helper');
+// var module.exports = require('./module.exports');
 
 module.exports = {
+
+   isArray:function (argument) {
+     if(!argument || Object.prototype.toString.call(argument).toUpperCase() !== '[OBJECT ARRAY]')
+      return false;
+     return true;
+   },
+
+   isFunction:function (argument) {
+     if(Object.prototype.toString.call(argument).toUpperCase() !== '[OBJECT FUNCTION]')
+      return false;
+     return true;
+   },
+
+   isObject:function (argument) {
+     if(Object.prototype.toString.call(argument).toUpperCase() !== '[OBJECT OBJECT]')
+      return false;
+     return true;
+   },
+
     /**
      * Sort given array by provided rule in comparator function
      * @param {Array} list
@@ -8,7 +27,7 @@ module.exports = {
      */
 
     sort:function (list, comparator) {
-      if (!list || !Helper.isArray(list) || (comparator && !Helper.isFunction(comparator))) 
+      if (!list || !module.exports.isArray(list) || (comparator && !module.exports.isFunction(comparator))) 
         return false;
       var count = list.length-1;
         for (var i = 0; i < count; i++) {
@@ -58,7 +77,7 @@ module.exports = {
         }
         if (typeof(sequence) === "string") {
             return upp(sequence);
-        } else if(Helper.isArray(sequence)){
+        } else if(module.exports.isArray(sequence)){
             var result = [];
             for(var i = 0 ; i < sequence.length ; i++){
                 result[i] = sequence[i].charAt(0).toUpperCase() + sequence[i].slice(1);;
@@ -90,7 +109,7 @@ module.exports = {
  
     reverse:function (list) {
       var result = [];
-      if (list && !Helper.isArray(list)) {
+      if (list && !module.exports.isArray(list)) {
         return false;
       }
       if (list && list.length) {
@@ -109,7 +128,7 @@ module.exports = {
      */
  
     map:function (list, iterator) {
-      if(Helper.isFunction(iterator)){
+      if(module.exports.isFunction(iterator)){
         var typeList = Object.prototype.toString.call(list).toUpperCase();
         switch(typeList){
             case '[OBJECT ARRAY]':
@@ -142,7 +161,7 @@ module.exports = {
  
     groupBy:function (list, iterator) {
       if(
-          !list || !Helper.isArray(list) || !iterator || !Helper.isFunction(iterator)
+          !list || !module.exports.isArray(list) || !iterator || !module.exports.isFunction(iterator)
         ) {
         return false;
       }
@@ -167,11 +186,11 @@ module.exports = {
      */
 
     once: function(func){
-      if(Helper.isFunction(func)) {
+      if(module.exports.isFunction(func)) {
         var result;
         return function() { 
           if(func) {
-            result = func.apply(Helper, arguments);
+            result = func.apply(module.exports, arguments);
             func = null;
           }
           return result;
@@ -190,9 +209,9 @@ module.exports = {
      */
 
     debounce: function(func, wait){
-      if(Helper.isFunction(func) && typeof(wait) === 'number') {
+      if(module.exports.isFunction(func) && typeof(wait) === 'number') {
         var result = setTimeout(function(){
-        func.apply(Helper, arguments);
+        func.apply(module.exports, arguments);
       }, wait);
     return result;
       }
