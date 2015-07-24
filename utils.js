@@ -1,6 +1,6 @@
-// var module.exports = require('./module.exports');
+var utils = function(){};
 
-module.exports = {
+utils = {
 
    isArray:function (argument) {
      if(!argument || Object.prototype.toString.call(argument).toUpperCase() !== '[OBJECT ARRAY]')
@@ -27,7 +27,7 @@ module.exports = {
      */
 
     sort:function (list, comparator) {
-      if (!list || !module.exports.isArray(list) || (comparator && !module.exports.isFunction(comparator))) 
+      if (!list || !utils.isArray(list) || (comparator && !utils.isFunction(comparator))) 
         return false;
       var count = list.length-1;
         for (var i = 0; i < count; i++) {
@@ -77,7 +77,7 @@ module.exports = {
         }
         if (typeof(sequence) === "string") {
             return upp(sequence);
-        } else if(module.exports.isArray(sequence)){
+        } else if(utils.isArray(sequence)){
             var result = [];
             for(var i = 0 ; i < sequence.length ; i++){
                 result[i] = sequence[i].charAt(0).toUpperCase() + sequence[i].slice(1);;
@@ -109,7 +109,7 @@ module.exports = {
  
     reverse:function (list) {
       var result = [];
-      if (list && !module.exports.isArray(list)) {
+      if (list && !utils.isArray(list)) {
         return false;
       }
       if (list && list.length) {
@@ -128,7 +128,7 @@ module.exports = {
      */
  
     map:function (list, iterator) {
-      if(module.exports.isFunction(iterator)){
+      if(utils.isFunction(iterator)){
         var typeList = Object.prototype.toString.call(list).toUpperCase();
         switch(typeList){
             case '[OBJECT ARRAY]':
@@ -161,7 +161,7 @@ module.exports = {
  
     groupBy:function (list, iterator) {
       if(
-          !list || !module.exports.isArray(list) || !iterator || !module.exports.isFunction(iterator)
+          !list || !utils.isArray(list) || !iterator || !utils.isFunction(iterator)
         ) {
         return false;
       }
@@ -186,7 +186,7 @@ module.exports = {
      */
 
     once: function(func){
-      if(module.exports.isFunction(func)) {
+      if(utils.isFunction(func)) {
         var result;
         return function() { 
           if(func) {
@@ -209,7 +209,7 @@ module.exports = {
      */
 
     debounce: function(func, wait){
-      if(module.exports.isFunction(func) && typeof(wait) === 'number') {
+      if(utils.isFunction(func) && typeof(wait) === 'number') {
         var result = setTimeout(function(){
         func.apply(module.exports, arguments);
       }, wait);
@@ -218,5 +218,6 @@ module.exports = {
       return false;
     }
 
-
 };
+
+module.exports = utils;
